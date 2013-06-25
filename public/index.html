@@ -16,8 +16,12 @@
         });
 
         // Additional initialization code such as adding Event Listeners goes here
+        FB.api('/me', function(response) {
+          alert('Your name is ' + response.name);
+        });
       };
 
+    
       // Load the SDK asynchronously
       (function(d, s, id){
          var js, fjs = d.getElementsByTagName(s)[0];
@@ -27,5 +31,9 @@
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
     </script>
+
+    <script>
+    </script>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="true"></div>
   </body>
 </html>
