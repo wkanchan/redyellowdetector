@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ruby on Rails: Welcome aboard</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+
+
+$(document).ready(function() {
+  console.log('ready!');
+  $.ajaxSetup({ cache: true });
+  $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+    window.fbAsyncInit = function() {
+      // init the FB JS SDK
+      console.log('FB sdk inited');
+        FB.init({
+          appId      : '440731572690658',                        // App ID from the app dashboard
+          channelUrl : '//redyellowdetector.herokuapp.com/channel.html', // Channel file for x-domain comms
+          status     : true,                                 // Check Facebook Login status
+          xfbml      : true                                  // Look for social plugins on the page
+        });
+
+        FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            // the user is logged in and has authenticated your
+            // app, and response.authResponse supplies
+            // the user's ID, a valid access token, a signed
+            // request, and the time the access token 
+            // and signed request each expire
+            var uid = response.authResponse.userID;
+            var accessToken = response.authResponse.accessToken;
+            
+            enableShowButton();
+
+          } else if (response.status === 'not_authorized') {
+            // the user is logged in to Facebook, 
+            // but has not authenticated your app
+            $('#showbutton').html('not authorized :(');
+          } else {
+            // the user isn't logged in to Facebook.
+
+            $('#showbutton').removeAttr('disabled');
+            $('#showbutton').html('Click here to login');
+            $('#showbutton').off('click'); // remove previous handler
+            $('#showbutton').click(function() {
+              $('#showbutton').attr('disabled','disabled');
+              $('#showbutton').html('Waiting for user');
+              FB.login(function(response) {
+                if (response.authResponse) {
+                  console.log('Thanks!');
+                  enableShowButton();
+                } else {
+                  $('#showbutton').html('Cancelled :(');
+                  console.log('User cancelled login or did not fully authorize.');
+                }
+              });
+            });
+          }
+         });
+
+        
+        FB.Event.subscribe('auth.login', function(response) {
+          // do something with response
+          $('#showbutton').html('Logged in. Refresh this page!');
+        });
+    };
+  });
+});
+
+</script>
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script>
+
+
+      // window.fbAsyncInit = function() {
+        
+
+      // };
+    
+      // Load the SDK asynchronously
+      // (function(d, s, id){
+      //    var js, fjs = d.getElementsByTagName(s)[0];
+      //    if (d.getElementById(id)) {return;}
+      //    js = d.createElement(s); js.id = id;
+      //    js.src = "//connect.facebook.net/en_US/all.js";
+      //    fjs.parentNode.insertBefore(js, fjs);
+      //  }(document, 'script', 'facebook-jssdk'));
+
+      function enableShowButton() {   
+        $('#showbutton').removeAttr('disabled');
+        $('#showbutton').html('Show name');     
+        $('#showbutton').off('click');
+        $("#showbutton").click(function() {
+          FB.api('/me', function(response) {
+            alert('Your name is ' + response.name);
+          });
+        });
+      }
+    </script>
+
+    <!-- <div class="fb-like" data-send="true" data-width="450" data-show-faces="true"></div> -->
+
+    <button id="showbutton" disabled>Waiting..</button>
+  </body>
+</html>

@@ -1,39 +1,35 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ruby on Rails: Welcome aboard</title>
+    <title>Red-Yellow Detector</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/redyellow_data.js"></script>
+    <script src="/main.js"></script>
+    <style>
+    .verybig {
+      font-size: 4em;
+    }
+    </style>
   </head>
   <body>
     <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function() {
-        // init the FB JS SDK
-        FB.init({
-          appId      : '440731572690658',                        // App ID from the app dashboard
-          channelUrl : '//redyellowdetector.herokuapp.com/channel.html', // Channel file for x-domain comms
-          status     : true,                                 // Check Facebook Login status
-          xfbml      : true                                  // Look for social plugins on the page
-        });
+    <!-- <div class="fb-like" data-send="true" data-width="450" data-show-faces="true"></div> -->
 
-        // Additional initialization code such as adding Event Listeners goes here
-        FB.api('/me', function(response) {
-          alert('Your name is ' + response.name);
-        });
-      };
+    <table width="100%">
+      <tr>
+        <td colspan="2" style="text-align:center">
+          <h1>Hi <span id="fbName"></span>. Click this damn button to start!</h1>
+          <button id="showButton" style="width:50%" disabled>Loading...</button>
+        </td>
+      </tr>
+      <tr>
+        <td width="50%" style="vertical-align:top"><div id="redBox" style="width:100%;background-color:#ffcccc"></div></td>
+        <td width="50%" style="vertical-align:top"><div id="yellowBox" style="width:100%;background-color:#ffffcc"></div></td>
+      </tr>
+    </table>
 
-    
-      // Load the SDK asynchronously
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script>
-
-    <script>
-    </script>
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="true"></div>
+    <div id="results" align="center">
+      Results will appear here.
+    </div>
   </body>
 </html>

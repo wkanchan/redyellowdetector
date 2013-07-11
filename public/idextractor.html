@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Facebook ID extractor</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+
+var url_list = [];
+
+$(document).ready(function() {
+  console.log('ready!');
+
+  $("#gobutton").click(function() {
+    url_list = $("#inputbox").val().split("\n");
+    $("#outputname").html("");
+    $("#outputid").html("");
+
+    for (var i=0; i<url_list.length; i++) {
+      extract_id(url_list[i]);
+    }
+
+  });
+
+  $("#outputid").click(function() {
+    var selection = window.getSelection();
+    var range = document.createRange();
+    range.selectNodeContents(document.getElementById("outputid"));
+    selection.removeAllRanges();
+    selection.addRange(range);
+  })
+});
+
+var processed_set = {};
+
+function extract_id(url) {
+  if (url === undefined || url === "") return;
+  var name = url.substring(url.lastIndexOf("/")+1);
+  console.log(name);
+  $.ajax({
+    url: "//graph.facebook.com/"+name,
+  }).done(function(data) {
+    if (data.id in processed_set) {
+      // duplicated, ignore
+    } else {
+      processed_set[data.id] = 1;
+      $("#outputname").append(name+"<br>");
+      $("#outputid").append("&nbsp;&nbsp;"+data.id+":1,<br>");
+    }
+  });
+}
+
+    </script>
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+        <td colspan="3" style="text-align:center">
+          <button id="gobutton" style="width:25%">
+            <br>Extract<br>&nbsp;
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td width="30%"><textarea id="inputbox" style="width:90%;height:300px"></textarea></td>
+        <td width="45%" style="vertical-align:top"><div id="outputname" style="width:100%;background-color:lightgray"></div></td>
+        <td width="25%" style="vertical-align:top"><div id="outputid" style="width:100%;background-color:lightgray"></div></td>
+      </tr>
+    </table>
+  </body>
+</html>
